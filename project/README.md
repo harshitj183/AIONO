@@ -158,6 +158,16 @@ Frontend runs at: **http://localhost:3000**
 
 ---
 
+## Live Deployment
+
+| Service | URL |
+|---|---|
+| **Frontend** | https://aiono-frontend.vercel.app |
+| **Backend API** | https://aiono-backend.onrender.com |
+| **API Docs** | https://aiono-backend.onrender.com/docs |
+
+---
+
 ## Demo Accounts
 
 | Role | Username | Password |
