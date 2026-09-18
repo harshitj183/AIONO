@@ -1,3 +1,7 @@
+# ── Prompt / internal docs ────────────────────────────────────
+prompt docs/
+"prompt docs"/
+
 # ── Python ────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
