@@ -1,0 +1,53 @@
+dekho ai project mujhe subit karna hai 
+
+6 ghante me teacher ne bola hai drive link  milenga usem github and live link submit karna hoga tum 
+isproject ko folowing  chixo me dhyan rkhke bnao 
+
+
+# must be looks like human made jarurat pade to skill use kr lena koi online se lekar 
+#  make is shoud me professional
+# make sure mere pas 6 hour hai tocken bhi gemini ka free wala hai to tocken jyada kharch mat krna 
+#ui and ux shwoud me human made not coomon ai made loks inkse lye tumpremium ui ux skil use kr skte ho ,,use modern ui ux manner
+#mujhe kuch n krna pade tum ek nbar me full project bnana as paer need
+# tum do agent banna jinme se phle ka  kam requirment ke hisab se prohect bna ki nhi and dusre ka akm ahi ki dekhan ki token faltu to nhi ja rhe thik
+#  free groq llm api dunga tum vhi use krna 
+#ultimately goal mere project me profesianlism ho and proper manner me project ban ho liek har chize proepr mention ho 
+#make sure to maintain readme fiel and  and docs fiel em project me use hone wal atechstach mention ho us folder me tum flowchar to and usefullimage ho and pure project ke banen eke ke bad maanlo kisi ko project recarding  kuch chaiye to to us folder me ho jaise prd and archetcure etc thik tum samjh reh ho n 
+
+# Do not build features merely because they are technically possible; every feature must have a clear user, business purpose, measurable value, and realistic workflow.”
+
+# ek agent banana jo ek dekhe t=ki realy proper project working ahi ki nhi kyu ki kyi bar ai  prject ban dekta hai but uska kyi jise fully bni nhi hoti ahi vo just  dikhta hai internally kam nhi kr rha hto ahai usek kuch feature 
+
+#Optimize the project for an engineering interview demonstration. The final product should make it easy to demonstrate the problem, architecture, agent workflow, tool calling, RAG/data retrieval, database design, error handling, security, testing, deployment, and measurable business value.
+
+#
+1. Build this as a production-oriented product, not a demo or college prototype; every feature must solve a clear real-world business problem.
+
+2. Use genuine agentic workflows where the agent can understand the task, choose the right tools, execute multi-step actions, and validate results.
+
+3. Give the agent well-defined tools for database queries, document retrieval, calculations, analytics, and business actions.
+
+4. Never allow the agent to confidently invent facts; when evidence is insufficient, clearly state it or request human review.
+
+5. Implement human-in-the-loop approval for high-impact, sensitive, or uncertain actions.
+
+6. Make important AI conclusions explainable by showing supporting evidence, data sources, and relevant tool execution details.
+
+7. Implement appropriate conversation and task-level memory so the agent can maintain context across multi-step workflows.
+
+8. Handle real-world failures such as API errors, timeouts, invalid inputs, missing data, database failures, and unavailable tools gracefully.
+
+9. Implement authentication, authorization, input validation, secure API handling, environment-based secrets, and role-based data access.
+
+10. Design a scalable database schema with proper relationships, constraints, indexes, timestamps, audit fields, and migration support.
+
+11. Add structured logging, agent execution traces, tool-call history, error tracking, latency monitoring, and basic usage metrics.
+
+12. Build a professional UX that clearly communicates loading, processing, tool execution, success, failure, uncertainty, and human-review states.
+
+13. Create unit, integration, and end-to-end tests covering core workflows, edge cases, and failure scenarios.
+
+14. Use a modular architecture with clear separation between frontend, backend, business logic, agent orchestration, tools, database, and external integrations.
+
+15. Optimize AI usage for performance and cost by minimizing unnecessary LLM calls, using deterministic logic where appropriate, retrieving only relevant context, and tracking latency and usage.
+16 every thing shoeud be in huamn like english 
