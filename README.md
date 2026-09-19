@@ -111,7 +111,7 @@ npm run dev
 ## Sample Questions
 
 - *"Why did customer complaints increase by 23% this month?"*
-- *"What is causing the decline in Product X revenue in Q3?"*
+- *"What is causing the decline in AIONO Investigator revenue in Q3?"*
 - *"Which department has the highest attrition risk right now?"*
 - *"Are infrastructure costs above budget this quarter?"*
 - *"What products are generating the most support tickets?"*

@@ -96,7 +96,7 @@ class TestAnalyticsTool:
 class TestDocumentSearchTool:
     def test_keyword_search_returns_results(self):
         from app.tools.document_search import document_search_tool
-        result = document_search_tool.invoke({"query": "authentication login Product X", "top_k": 3})
+        result = document_search_tool.invoke({"query": "authentication login AIONO Investigator", "top_k": 3})
         data = json.loads(result)
         assert "error" not in data
         assert "results" in data
@@ -175,7 +175,7 @@ class TestReportGeneratorTool:
         from app.tools.report_generator import report_generator_tool
         defaults = {
             "question": "Why did complaints increase?",
-            "root_cause": "Authentication regression in Product X v2.3.0",
+            "root_cause": "Authentication regression in AIONO Investigator v2.3.0",
             "evidence": [
                 {"claim": "Login tickets up 78%", "source": "analytics_tool", "data": "78%", "confidence": "high"},
                 {"claim": "Incident report confirms OAuth regression", "source": "documents", "data": "INC-2024-089", "confidence": "high"},

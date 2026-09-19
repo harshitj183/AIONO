@@ -210,7 +210,7 @@ def researcher_node(state: AgentState) -> AgentState:
     # If documents not yet searched, search internal release notes & incident reports
     if "document_search_tool" not in tools_called:
         try:
-            doc_query = "Product X release authentication login issue" if ("complaint" in q_lower or "login" in q_lower) else state["question"]
+            doc_query = "AIONO Investigator release authentication login issue" if ("complaint" in q_lower or "login" in q_lower) else state["question"]
             res_str = document_search_tool.invoke({"query": doc_query, "top_k": 3})
             research_data.append({"tool": "document_search_tool", "query": doc_query, "result": json.loads(res_str)})
             trace.append({
@@ -450,7 +450,7 @@ def root_cause_node(state: AgentState) -> AgentState:
         q_lower = state["question"].lower()
         if "complaint" in q_lower or "login" in q_lower or "ticket" in q_lower:
             root_cause = (
-                "The 23% surge in complaints is driven by login and authentication failures in Product X "
+                "The 23% surge in complaints is driven by login and authentication failures in AIONO Investigator "
                 "caused by the OAuth 2.0 PKCE migration in release v2.3.0 rejecting legacy browser sessions."
             )
             recommendations = [
@@ -460,7 +460,7 @@ def root_cause_node(state: AgentState) -> AgentState:
             ]
         elif "revenue" in q_lower or "sales" in q_lower:
             root_cause = (
-                "Product X revenue declined due to enterprise deal delays and contract renegotiations "
+                "AIONO Investigator revenue declined due to enterprise deal delays and contract renegotiations "
                 "arising from product stability and authentication concerns reported in Q3."
             )
             recommendations = [

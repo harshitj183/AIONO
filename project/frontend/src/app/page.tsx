@@ -195,7 +195,7 @@ export default function DashboardPage() {
                 <ResponsiveContainer width="100%" height={180}>
                   <BarChart data={metrics.product_ticket_breakdown} layout="vertical">
                     <XAxis type="number" tick={{ fontSize: 10, fill: "#475569" }} tickLine={false} axisLine={false} />
-                    <YAxis type="category" dataKey="product_name" tick={{ fontSize: 10, fill: "#94a3b8" }} tickLine={false} axisLine={false} width={80} />
+                    <YAxis type="category" dataKey="product_name" tick={{ fontSize: 10, fill: "#94a3b8" }} tickLine={false} axisLine={false} width={130} />
                     <Tooltip
                       contentStyle={{ background: "#161b27", border: "1px solid #1e2433", borderRadius: 10, fontSize: 12 }}
                     />

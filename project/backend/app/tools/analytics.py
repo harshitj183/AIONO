@@ -41,7 +41,7 @@ def analytics_tool(metric: str, period_days: int = 30, product: Optional[str] = 
     Args:
         metric: One of the metric names listed above.
         period_days: Number of days to look back (default 30).
-        product: Optional product name filter (e.g. "Product X").
+        product: Optional product name filter (e.g. "AIONO Investigator").
 
     Returns JSON with computed analytics data and interpretation hints.
     """

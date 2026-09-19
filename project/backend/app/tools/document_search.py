@@ -95,7 +95,7 @@ def document_search_tool(query: str, top_k: int = 3, doc_type: Optional[str] = N
     - Product roadmaps
 
     Args:
-        query: Natural language search query (e.g. "authentication failures Product X login")
+        query: Natural language search query (e.g. "authentication failures AIONO Investigator login")
         top_k: Number of documents to return (default 3, max 5)
         doc_type: Optional filter — release_note | incident_report | policy | memo
 

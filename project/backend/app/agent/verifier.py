@@ -126,7 +126,7 @@ def check_tools() -> dict:
     # document_search_tool
     try:
         from app.tools.document_search import document_search_tool
-        res = document_search_tool.invoke({"query": "authentication Product X login", "top_k": 2})
+        res = document_search_tool.invoke({"query": "authentication AIONO Investigator login", "top_k": 2})
         data = json.loads(res)
         if "error" not in data and isinstance(data.get("results"), list):
             ok(f"document_search_tool → {len(data['results'])} docs found ({data.get('search_type')})")

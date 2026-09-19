@@ -36,6 +36,36 @@ logger = structlog.get_logger("aiono.api")
 async def lifespan(app: FastAPI):
     logger.info("aiono.startup", version=settings.APP_VERSION)
     await init_db()
+    # Ensure demo DB uses AIONO product branding (seed empty / upgrade from Product X)
+    try:
+        from sqlalchemy import text, select, func
+        from app.database import AsyncSessionLocal
+        from app.models import User
+        from app.seed import seed, clear_all
+
+        async with AsyncSessionLocal() as session:
+            user_count = (await session.execute(select(func.count()).select_from(User))).scalar() or 0
+            legacy = 0
+            try:
+                legacy = (
+                    await session.execute(
+                        text(
+                            "SELECT COUNT(*) FROM sales "
+                            "WHERE product_name LIKE 'Product %' OR product_name LIKE 'Service %'"
+                        )
+                    )
+                ).scalar() or 0
+            except Exception:
+                legacy = 0
+            if user_count == 0:
+                await seed(session)
+                logger.info("aiono.seed.created")
+            elif legacy > 0:
+                await clear_all(session)
+                await seed(session)
+                logger.info("aiono.seed.migrated_products")
+    except Exception as exc:
+        logger.warning("aiono.seed.skipped", error=str(exc))
     yield
     logger.info("aiono.shutdown")
 

@@ -1,23 +1,30 @@
 """
-Seed script – populates the database with realistic mock business data.
+Seed script – populates the database with realistic AIONO demo business data.
 Run once on first startup via: python -m app.seed
+Force reseed (wipe + reload): python -m app.seed --force
 """
 
 import asyncio
 import random
+import sys
 from datetime import datetime, timedelta
+from sqlalchemy import delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import AsyncSessionLocal, init_db
-from app.models import User, Sale, SupportTicket, Employee, Expense, Document
+from app.models import User, Sale, SupportTicket, Employee, Expense, Document, InvestigationLog
 from app.auth.dependencies import hash_password
 
+# AIONO product line — fictional SaaS suite the agent investigates against
 PRODUCTS = [
-    ("Product X", "Software"),
-    ("Product Y", "Analytics"),
-    ("Product Z", "Infrastructure"),
-    ("Service A", "Professional Services"),
-    ("Service B", "Support Plans"),
+    ("AIONO Investigator", "Software"),       # flagship agentic investigation platform
+    ("AIONO Insights", "Analytics"),          # KPI dashboards & trend analytics
+    ("AIONO DataHub", "Infrastructure"),      # connectors, pipelines, data lake
+    ("AIONO Advisory", "Professional Services"),
+    ("AIONO Care", "Support Plans"),
 ]
+
+# Flagship product used in the "auth regression / complaint spike" demo narrative
+FLAGSHIP = "AIONO Investigator"
 
 REGIONS = ["North America", "Europe", "Asia Pacific", "India", "LATAM"]
 DEPARTMENTS = ["Engineering", "Sales", "Marketing", "HR", "Finance", "Operations"]
@@ -32,6 +39,15 @@ def days_ago(n: int) -> datetime:
 def random_date(start_days_ago: int, end_days_ago: int) -> datetime:
     delta = random.randint(end_days_ago, start_days_ago)
     return days_ago(delta)
+
+
+async def clear_all(session: AsyncSession) -> None:
+    """Wipe demo tables so --force can reload cleanly (FK-safe order)."""
+    # Children first → parents last (investigation_logs.user_id → users.id)
+    for model in (InvestigationLog, Document, Expense, Employee, SupportTicket, Sale, User):
+        await session.execute(delete(model))
+    await session.commit()
+    print("🧹 Cleared existing tables.")
 
 
 async def seed(session: AsyncSession) -> None:
@@ -63,7 +79,8 @@ async def seed(session: AsyncSession) -> None:
     sales = []
     for i in range(350):
         product, category = random.choice(PRODUCTS)
-        if product == "Product X" and i > 200:
+        # Flagship softens in recent period — supports Q3 revenue-decline narrative
+        if product == FLAGSHIP and i > 200:
             amount = random.uniform(500, 1200)
         else:
             amount = random.uniform(800, 8000)
@@ -81,10 +98,18 @@ async def seed(session: AsyncSession) -> None:
     session.add_all(sales)
 
     # ── Support Tickets ────────────────────────────────────────────────────
+    subjects = {
+        "login": "Unable to log in to AIONO — authentication error",
+        "billing": "Incorrect charge on AIONO Care invoice",
+        "performance": "AIONO Insights dashboard loading very slowly",
+        "feature_request": "Request for bulk export in AIONO Investigator",
+        "bug": "Investigation report not saving after form submission",
+    }
     tickets = []
     for i in range(400):
         is_recent = i > 250
         if is_recent:
+            # Recent spike skewed toward flagship + login issues
             product = random.choices(
                 [p[0] for p in PRODUCTS],
                 weights=[60, 10, 10, 10, 10]
@@ -102,13 +127,6 @@ async def seed(session: AsyncSession) -> None:
             created = random_date(90, 31)
 
         ticket_num = f"TKT-{10000 + i}"
-        subjects = {
-            "login": "Unable to log in – authentication error",
-            "billing": "Incorrect charge on invoice",
-            "performance": "Dashboard loading very slowly",
-            "feature_request": "Request for bulk export feature",
-            "bug": "Data not saving after form submission",
-        }
         tickets.append(SupportTicket(
             ticket_id=ticket_num,
             customer_id=random.randint(1000, 9999),
@@ -119,9 +137,11 @@ async def seed(session: AsyncSession) -> None:
                 ["open", "in_progress", "resolved", "closed"],
                 weights=[20, 25, 35, 20]
             )[0],
-            subject=subjects.get(category, "General inquiry"),
-            description=f"Customer reported issue with {category} on {product}. "
-                        f"Severity: {severity}. Ticket #{ticket_num}.",
+            subject=subjects.get(category, "General AIONO inquiry"),
+            description=(
+                f"Customer reported issue with {category} on {product}. "
+                f"Severity: {severity}. Ticket #{ticket_num}."
+            ),
             created_at=created,
             resolved_at=created + timedelta(hours=random.randint(2, 72))
             if random.random() > 0.3 else None,
@@ -167,20 +187,20 @@ async def seed(session: AsyncSession) -> None:
             department=dept,
             category=random.choice(expense_categories),
             amount=round(random.uniform(500, 50000), 2),
-            description=f"Q{random.randint(1,4)} {dept} operational expense",
+            description=f"Q{random.randint(1, 4)} {dept} operational expense",
             approved_by=random.choice(approvers),
             expense_date=random_date(90, 0),
             is_approved=random.random() > 0.05,
         ))
     session.add_all(expenses)
 
-    # ── Documents (for RAG) ───────────────────────────────────────────────
+    # ── Documents (for RAG) — AIONO product narrative ──────────────────────
     documents = [
         Document(
-            title="Product X v2.3.0 Release Notes",
+            title="AIONO Investigator v2.3.0 Release Notes",
             doc_type="release_note",
             department="Engineering",
-            content="""Product X version 2.3.0 was released on the 15th of last month.
+            content="""AIONO Investigator version 2.3.0 was released on the 15th of last month.
 Key changes:
 - Migrated authentication service from OAuth 1.0 to OAuth 2.0 PKCE flow.
 - Updated session token expiry from 24 hours to 2 hours for security compliance.
@@ -188,8 +208,8 @@ Key changes:
 - Database connection pooling increased to handle higher concurrency.
 - Known issue: Some users with saved browser sessions may face forced logout and re-authentication errors.
 - Hotfix v2.3.1 is scheduled for next week to address session migration issues.
-Engineering team has flagged this as a medium-priority regression.""",
-            tags="product_x,release,authentication,login,regression",
+Engineering team has flagged this as a medium-priority regression affecting AIONO Investigator customers.""",
+            tags="aiono_investigator,release,authentication,login,regression",
             author="Engineering Team",
             published_at=days_ago(32),
         ),
@@ -197,13 +217,13 @@ Engineering team has flagged this as a medium-priority regression.""",
             title="Customer Support Escalation Policy",
             doc_type="policy",
             department="Operations",
-            content="""Support Escalation Policy – Version 3.1.
+            content="""Support Escalation Policy – Version 3.1 (AIONO Care).
 All critical severity tickets must be escalated within 2 hours of creation.
 High severity tickets require escalation within 8 hours.
 If a product bug affects more than 50 customers, an incident report must be filed.
 Support managers must notify the product team for any 20% spike in ticket volume for a single category within a 7-day window.
-Post-incident reviews are mandatory for P1 and P2 incidents.""",
-            tags="support,escalation,policy,sla",
+Post-incident reviews are mandatory for P1 and P2 incidents across AIONO Investigator, Insights, and DataHub.""",
+            tags="support,escalation,policy,sla,aiono_care",
             author="Operations Team",
             published_at=days_ago(120),
         ),
@@ -211,14 +231,15 @@ Post-incident reviews are mandatory for P1 and P2 incidents.""",
             title="Q3 Sales Performance Review",
             doc_type="memo",
             department="Sales",
-            content="""Q3 Sales Performance Summary:
+            content="""Q3 Sales Performance Summary (AIONO product suite):
 Total revenue achieved: $2.4M against a target of $2.8M (85% attainment).
-Product X contributed 42% of total revenue in Q2 but has seen a decline to 31% in Q3.
+AIONO Investigator contributed 42% of total revenue in Q2 but has seen a decline to 31% in Q3.
 Major deals were lost in the Enterprise segment citing product stability concerns.
+AIONO Insights and AIONO DataHub held steady; AIONO Advisory and AIONO Care grew modestly.
 North America region showed strongest performance at 94% of quota.
 Asia Pacific underperformed at 71% primarily due to delayed product localisation.
-Sales leadership has raised concerns about Product X reliability impacting deal closures.""",
-            tags="sales,q3,revenue,product_x,performance",
+Sales leadership has raised concerns about AIONO Investigator reliability impacting deal closures.""",
+            tags="sales,q3,revenue,aiono_investigator,performance",
             author="Sales Director",
             published_at=days_ago(20),
         ),
@@ -228,16 +249,16 @@ Sales leadership has raised concerns about Product X reliability impacting deal 
             department="Engineering",
             content="""Incident Report – INC-2024-089
 Severity: P2 – High
-Affected System: Authentication Service (Product X)
+Affected System: Authentication Service (AIONO Investigator)
 Duration: 4 hours 22 minutes
 Root Cause: The OAuth 2.0 PKCE migration introduced an incompatibility with legacy browser sessions. When existing users attempted to log in after the v2.3.0 upgrade, old session tokens were rejected without a proper error message, causing silent authentication failures.
-Impact: Approximately 1,200 users experienced login failures. 68% of new support tickets in this period were login-related.
+Impact: Approximately 1,200 users experienced login failures. 68% of new support tickets in this period were login-related for AIONO Investigator.
 Resolution: Temporary rollback of session validation to accept both old and new token formats.
 Action Items:
 1. Complete hotfix deployment within 5 business days.
 2. Implement proper session migration for all active users.
 3. Add monitoring alerts for authentication error rate spikes above 5%.""",
-            tags="incident,authentication,product_x,outage,login",
+            tags="incident,authentication,aiono_investigator,outage,login",
             author="Engineering Lead",
             published_at=days_ago(28),
         ),
@@ -262,35 +283,48 @@ Action: HR to partner with Engineering leadership on workload redistribution."""
             department="Finance",
             content="""Infrastructure Cost Review – Finance Team:
 Cloud infrastructure spend increased by 34% quarter-over-quarter, exceeding budget by $180,000.
-Primary drivers: unoptimised database queries causing excessive read operations, over-provisioned staging environments running 24/7, and a 3x increase in data storage for Product X analytics.
+Primary drivers: unoptimised database queries causing excessive read operations, over-provisioned staging environments running 24/7, and a 3x increase in data storage for AIONO Insights / AIONO DataHub analytics pipelines.
 Recommended actions:
 1. Right-size staging environments to auto-scale during business hours only.
 2. Archive analytics data older than 12 months to cold storage.
 3. Implement query optimisation for the top 10 slow queries identified by the DBA team.
 Target: 25% cost reduction within 60 days.""",
-            tags="infrastructure,cost,finance,cloud,optimization",
+            tags="infrastructure,cost,finance,cloud,optimization,aiono_datahub",
             author="Finance Controller",
             published_at=days_ago(10),
         ),
         Document(
-            title="Product Roadmap – Q4 Priorities",
+            title="AIONO Product Roadmap – Q4 Priorities",
             doc_type="policy",
             department="Engineering",
-            content="""Product Roadmap Q4 Focus Areas:
-1. Stability and reliability – address all P1/P2 open bugs before new feature work.
+            content="""AIONO Product Roadmap Q4 Focus Areas:
+1. Stability and reliability – address all P1/P2 open bugs in AIONO Investigator before new feature work.
 2. Authentication service hardening – complete OAuth 2.0 migration with full backward compatibility.
-3. Performance improvements – target 40% reduction in dashboard load time.
-4. Mobile app launch – iOS and Android beta by end of Q4.
-5. API rate limiting and security hardening for enterprise customers.
+3. Performance improvements – target 40% reduction in AIONO Insights dashboard load time.
+4. Mobile app launch – iOS and Android beta for AIONO Investigator by end of Q4.
+5. API rate limiting and security hardening for enterprise customers on AIONO DataHub.
 Engineering velocity has been impacted by the authentication regression; two sprints have been dedicated to hotfix and stabilisation work.""",
-            tags="roadmap,q4,product,authentication,performance,mobile",
+            tags="roadmap,q4,aiono,authentication,performance,mobile",
             author="Product Manager",
             published_at=days_ago(5),
+        ),
+        Document(
+            title="AIONO Insights Feature Brief",
+            doc_type="release_note",
+            department="Engineering",
+            content="""AIONO Insights provides KPI cards, ticket trend charts, and category breakdowns for operations leaders.
+Recent feedback: enterprise customers request faster dashboard loads and CSV export.
+AIONO Insights is often sold as an upsell alongside AIONO Investigator subscriptions.
+Known dependency: Insights charts pull from the same auth session as Investigator — auth outages cascade to Insights usage.""",
+            tags="aiono_insights,analytics,dashboard,upsell",
+            author="Product Manager",
+            published_at=days_ago(40),
         ),
     ]
     session.add_all(documents)
     await session.commit()
     print("✅ Seed data inserted successfully.")
+    print("   Products: AIONO Investigator, Insights, DataHub, Advisory, Care")
     print("   Default accounts:")
     print("   admin    / Admin@123")
     print("   analyst  / Analyst@123")
@@ -298,8 +332,11 @@ Engineering velocity has been impacted by the authentication regression; two spr
 
 
 async def main():
+    force = "--force" in sys.argv
     await init_db()
     async with AsyncSessionLocal() as session:
+        if force:
+            await clear_all(session)
         await seed(session)
 
 
