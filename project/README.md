@@ -40,7 +40,7 @@ When a manager asks *"Why did customer complaints increase by 23% this month?"*,
 | **Frontend** | Next.js 14, React 18, TypeScript, Tailwind CSS |
 | **Backend** | FastAPI (Python), Uvicorn ASGI |
 | **AI / Agent** | LangGraph, LangChain, Groq LLM (qwen/qwen3.8-27b) |
-| **RAG** | Sentence Transformers (all-MiniLM-L6-v2), FAISS vector search |
+| **RAG** | TF-IDF semantic search (lightweight, production-ready) |
 | **Database** | SQLite with SQLAlchemy async ORM (aiosqlite) |
 | **Auth** | JWT (python-jose), bcrypt password hashing |
 | **Logging** | structlog (structured JSON logs) |
