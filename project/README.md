@@ -1,8 +1,20 @@
 # AIONO — AI Business Operations Investigator
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-aiono--frontend.vercel.app-6366f1?style=for-the-badge&logo=vercel&logoColor=white)](https://aiono-frontend.vercel.app)
+[![Backend API](https://img.shields.io/badge/Backend%20API-onrender.com-10b981?style=for-the-badge&logo=render&logoColor=white)](https://aiono-backend.onrender.com/docs)
+[![GitHub](https://img.shields.io/badge/GitHub-harshitj183%2FAIONO-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/harshitj183/AIONO)
+
+[![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![Next.js](https://img.shields.io/badge/Next.js-14-000000?style=flat-square&logo=nextdotjs&logoColor=white)](https://nextjs.org)
+[![LangGraph](https://img.shields.io/badge/LangGraph-Agentic%20AI-6366f1?style=flat-square)](https://langchain-ai.github.io/langgraph/)
+[![Groq](https://img.shields.io/badge/Groq-LLM-F55036?style=flat-square)](https://groq.com)
+
 > Ask any business question. AIONO investigates your data, searches internal documents, and returns an evidence-backed root cause report — automatically.
 
-![AIONO Dashboard](docs/screenshots/dashboard_preview.png)
+| 🌐 Frontend | 🔌 Backend API | 📖 API Docs |
+|:---:|:---:|:---:|
+| [aiono-frontend.vercel.app](https://aiono-frontend.vercel.app) | [aiono-backend.onrender.com](https://aiono-backend.onrender.com) | [/docs](https://aiono-backend.onrender.com/docs) |
 
 ---
 
