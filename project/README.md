@@ -53,10 +53,6 @@ When a manager asks *"Why did customer complaints increase by 23% this month?"*,
 
 ```
 AIONO/
-├── docs/                        # Architecture, PRD, flowcharts
-│   ├── architecture.md
-│   ├── prd.md
-│   └── must will be.txt
 ├── project/
 │   ├── backend/
 │   │   ├── app/
