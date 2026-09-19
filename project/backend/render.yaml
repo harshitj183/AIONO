@@ -20,4 +20,4 @@ services:
       - key: ACCESS_TOKEN_EXPIRE_MINUTES
         value: "60"
       - key: ALLOWED_ORIGINS
-        value: https://aiono-frontend-8j9elcx9y-harshitj183s-projects.vercel.app,http://localhost:3000,http://localhost:3001
+        value: https://aiono-frontend.vercel.app,https://aiono-frontend-8j9elcx9y-harshitj183s-projects.vercel.app,http://localhost:3000,http://localhost:3001

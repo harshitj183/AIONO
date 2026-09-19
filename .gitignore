@@ -3,6 +3,12 @@ docs/
 prompt docs/
 "prompt docs"/
 
+# ── Local deploy helper scripts (contain secrets) ─────────────
+check_render.py
+fix_cors.py
+fix_render.py
+update_render.py
+
 # ── Python ────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
